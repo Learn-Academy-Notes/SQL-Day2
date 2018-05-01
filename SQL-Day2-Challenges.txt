@@ -1,0 +1,106 @@
+-- WITH new_table AS 
+--(SELECT name, language FROM country c JOIN countrylanguage cl USING (countrycode))
+--SELECT * FROM new_table WHERE name = 'United States' OR name = 'Brazil' OR name = 'Switzerland'
+--ORDER BY name ASC
+
+/* SELECT name, COUNT(language) total_lgs_spoken
+FROM country c JOIN countrylanguage cl USING (countrycode)
+WHERE name = 'United States' OR name = 'Brazil' OR name = 'Switzerland'
+GROUP BY name
+ORDER BY COUNT(language) DESC */
+
+/*WITH new_table AS
+(SELECT * FROM country c JOIN city cy ON (c.code = cy.countrycode) ) 
+SELECT * FROM new_table WHERE name = 'United States' OR name = 'India'*/
+
+/*SELECT c.name, cy.name
+FROM country c JOIN 
+city cy ON (cy.countrycode = c.code)
+WHERE c.name = 'United States' OR c.name = 'India'*/
+
+--SELECT language FROM countrylanguage WHERE countrycode = 'CHE' AND isofficial = True
+
+/*SELECT COUNT(language) total_lgs_spoken, name 
+FROM countrylanguage JOIN country ON (country.code = countrylanguage.countrycode)
+WHERE isofficial = True
+GROUP BY name
+ORDER BY COUNT(language) DESC
+*/
+
+/* SELECT name, language
+FROM country JOIN countrylanguage ON (country.code = countrylanguage.countrycode)
+ORDER BY surfacearea DESC; */
+
+/*WITH new_table AS
+	(SELECT * FROM country WHERE gnp > 0 
+    ORDER BY gnp / capital ASC LIMIT 20)
+SELECT DISTINCT language 
+FROM new_table nt JOIN countrylanguage cl ON (nt.code = cl.countrycode) 
+ORDER BY language ASC */
+
+
+/*SELECT DISTINCT language
+FROM country c JOIN countrylanguage cl USING (countrycode)
+WHERE cl.countrycode NOT IN (SELECT countrycode FROM countrylanguage WHERE isofficial = TRUE )
+ORDER BY language ASC
+*/
+
+/*SELECT language, name, percentage, isofficial
+FROM country c JOIN countrylanguage cl USING (countrycode)
+WHERE cl.isofficial = True ORDER BY percentage DESC*/
+
+/*SELECT language, COUNT(language) total_countries
+FROM countrylanguage 
+GROUP BY language
+ORDER BY COUNT(language) DESC
+*/
+
+/*WITH new_table AS
+(SELECT population, name
+FROM city 
+WHERE countrycode = 'USA')
+SELECT SUM (population)
+FROM new_table*/
+
+/*SELECT SUM(cy.population)/(c.population)
+FROM city cy JOIN country c USING (countrycode)
+WHERE countrycode = 'USA'
+GROUP BY population*/
+
+
+--SELECT population FROM country WHERE countrycode='USA'
+
+/*SELECT
+	c.name, cy.name
+FROM 
+	country c LEFT OUTER JOIN city cy USING (countrycode)
+WHERE
+	cy.name IS NULL
+*/
+
+/*
+SELECT 
+	SUM(population)
+FROM 
+	city cy FULL OUTER JOIN countrylanguage cl USING (countrycode)
+WHERE
+	cl.language = 'Spanish' AND cl.isofficial = True
+*/    
+
+
+/*WITH new_table AS
+	(SELECT 
+     	*
+     FROM
+     	country c JOIN city cy USING (countrycode)
+     ORDER BY
+    	cy.population DESC LIMIT 100)
+SELECT DISTINCT countrycode FROM new_table */
+
+WITH new_table AS (
+	SELECT c.name country, cy.name city, cy.population
+	FROM country c JOIN city cy USING (countrycode)
+	ORDER BY cy.population DESC LIMIT 100
+	)
+SELECT DISTINCT country FROM new_table
+
